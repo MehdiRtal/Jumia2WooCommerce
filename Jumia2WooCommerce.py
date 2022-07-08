@@ -9,7 +9,7 @@ wcapi = API(
     timeout=50,
 )
 
-jumia_data = requests.get(r"https://sellercenter-api.jumia.ma?Action=GetProducts&Filter=all&Format=JSON&Timestamp=2022-07-08T18%3A11%3A50%2B01%3A00&UserID=douaertal96%40gmail.com&Version=1.0&Signature=d6cd98dd791cdd965f52c61a39609c3bf62d61a5e171d98f530b35d47c55a921").json()
+jumia_data = requests.get(r"Your jumia api").json()
 
 def post_products():
     for product in jumia_data["SuccessResponse"]["Body"]["Products"]["Product"]:
