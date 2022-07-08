@@ -45,10 +45,10 @@ def post_products():
                                           "position": 0,
                                           "visible": True,
                                           "options": option}]
-            # print(json.dumps(data, indent=2))
-            # c = input("Add product ? (Y/N): ")
-            # if c in ["Y","y"]:
-            wcapi.post("products", data=data)
-            # print("\033c")
+            print(json.dumps(data, indent=2))
+            c = input("Add product ? (Y/N): ")
+            if c in ["Y","y"]:
+                wcapi.post("products", data=data)
+            print("\033c")
 
 post_products()
