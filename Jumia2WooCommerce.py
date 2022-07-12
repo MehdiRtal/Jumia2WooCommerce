@@ -68,16 +68,7 @@ def post_products():
                     images.append({"src": image})
             except: pass
             data["images"] = images
-            if product["Variation"] == "S":
-                option = "S"
-            elif product["Variation"] == "M":
-                option = "M"
-            elif product["Variation"] == "L":
-                option = "L"
-            elif product["Variation"] == "XL":
-                option = "XL"
-            else:
-                option = "Standard"
+            option = product["Variation"]
             data["attributes"] = [{
                                 "id": "2",
                                 "name": "Taille",
@@ -89,6 +80,5 @@ def post_products():
             c = input("Add product ? (Y/N): ")
             if c in ["Y","y"]:
                 wcapi.post("products", data=data)
-            print("\033c")
 
 post_products()
