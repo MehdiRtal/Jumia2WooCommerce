@@ -7,7 +7,7 @@ from hmac import HMAC
 import datetime
 
 userid = input("Enter Jumia User ID: ")
-api_key = input("Enter Jumia API Key: ")
+key = input("Enter Jumia API Key: ")
 products_filter = input("Enter Jumia Products Filter (all, live, inactive, deleted, image-missing, pending, rejected, sold-out): ")
 url = input("Enter WooCommerce store URL: ")
 consumer_key = input("Enter WooCommerce Consumer Key: ")
@@ -22,7 +22,7 @@ def get_products(arg):
                 'Filter': products_filter,
                 'Timestamp': datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()
     }
-    api_key = '00e84350bed5683d0d2ebb0e96e2c885c72dba6b'.encode(encoding='utf-8')
+    api_key = key.encode(encoding='utf-8')
     concatenated = urllib.parse.urlencode(sorted(parameters.items())).encode(encoding='utf-8')
     data = requests.get(f"https://sellercenter-api.jumia.ma?{concatenated.decode()}&Signature={HMAC(api_key, concatenated, sha256).hexdigest()}").json()
     products = data["SuccessResponse"]["Body"]["Products"]["Product"]
