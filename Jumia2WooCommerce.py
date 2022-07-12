@@ -13,7 +13,7 @@ url = input("Enter WooCommerce store URL: ")
 consumer_key = input("Enter WooCommerce Consumer Key: ")
 consumer_secret = input("Enter WooCommerce Consumer Secret: ")
 
-def get_products():
+def get_products(arg):
     parameters = {
                 'UserID': userid,
                 'Version': '1.0',
@@ -22,10 +22,29 @@ def get_products():
                 'Filter': products_filter,
                 'Timestamp': datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()
     }
-    api_key = api_key.encode(encoding='utf-8')
+    api_key = '00e84350bed5683d0d2ebb0e96e2c885c72dba6b'.encode(encoding='utf-8')
     concatenated = urllib.parse.urlencode(sorted(parameters.items())).encode(encoding='utf-8')
-    parameters['Signature'] = HMAC(api_key, concatenated, sha256).hexdigest()
-    return requests.get(f"https://sellercenter-api.jumia.ma?{concatenated.decode()}&Signature={parameters['Signature']}").json()
+    data = requests.get(f"https://sellercenter-api.jumia.ma?{concatenated.decode()}&Signature={HMAC(api_key, concatenated, sha256).hexdigest()}").json()
+    products = data["SuccessResponse"]["Body"]["Products"]["Product"]
+    if arg == "all":
+        return products
+    else:
+        seen = []
+        duplicates = []
+        clean = []
+        counter = 0
+        for product in products:
+            if product["Name"] in seen:
+                duplicates.append(product)
+            if product["Name"] not in seen:
+                if counter == 1:
+                    clean.append(product)
+                counter = 1
+            seen.append(product["Name"])
+        if arg == "duplicates":
+            return duplicates
+        if arg == "clean":
+            return clean
 
 def post_products():
     wcapi = API(
@@ -34,7 +53,7 @@ def post_products():
                 consumer_secret=consumer_secret,
                 timeout=5,
     )
-    for product in get_products["SuccessResponse"]["Body"]["Products"]["Product"]:
+    for product in get_products("clean"):
         data = {}
         images = []
         if product["Status"] == "active" and product["Quantity"] != "0":
